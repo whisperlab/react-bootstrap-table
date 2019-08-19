@@ -31,7 +31,7 @@ class ToolBar extends Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     const delay = this.props.searchDelayTime ? this.props.searchDelayTime : 0;
     this.debounceCallback = this.handleDebounce(() => {
       this.seachInput && this.props.onSearch(this.seachInput.getValue());
@@ -40,7 +40,7 @@ class ToolBar extends Component {
     );
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.reset) {
       this.setSearchInput('');
     }
