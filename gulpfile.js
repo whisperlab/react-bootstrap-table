@@ -25,11 +25,11 @@ var demo = false;
 //    './lib/**'
 //  ]);
 //});
-function clean() {
+function clean(done) {
   return del([
     './dist/*',
     './lib/**'
-  ]);
+  ]).then(() => done());
 }
 exports.clean = clean;
 
@@ -38,14 +38,13 @@ exports.clean = clean;
 //  'webpack --config webpack.umd.config.js',
 //  'webpack --config webpack.umd.min.config.js'
 //]));
-function umdBuild(done) {
-  shell.task([
+function umdBuild() {
+  return shell.task([
     'webpack --config webpack.umd.config.js',
     'webpack --config webpack.umd.min.config.js'
   ])
-  done()
 }
-exports.umdBuild = gulp.series(exports.clean, umdBuild);
+exports.umdBuild = gulp.series(exports.clean, umdBuild());
 
 //------------
 // PROD
@@ -79,21 +78,34 @@ function prod(done) {
   // as well as uglify in production.
   // - This is the way React itself distributes their package,
   // as well as other libraries like react-boostrap
-  gulp.src(['./src/**/*.js', './src/*js'])
-    .pipe(babel())
-    .pipe(gulp.dest('./lib'));
-  // build the css
-  gulp.src('./css/react-bootstrap-table.css')
-    .pipe(concatCss("./react-bootstrap-table.min.css"))
-    .pipe(cssmin())
-    .pipe(gulp.dest('./dist'));
-  gulp.src(['./css/react-bootstrap-table.css',
-    './node_modules/react-s-alert/dist/s-alert-default.css',
-    './node_modules/react-s-alert/dist/s-alert-css-effects/scale.css'])
-    .pipe(concatCss('./react-bootstrap-table-all.min.css'))
-    .pipe(cssmin())
-    .pipe(gulp.dest('./dist'));
-  done()
+  return Promise.all([
+    new Promise(function(resolve, reject) {
+      gulp.src(['./src/**/*.js', './src/*js'])
+        .pipe(babel())
+        .on('error', reject)
+        .pipe(gulp.dest('./lib'))
+        .on('end', resolve);
+    }),
+    new Promise(function(resolve, reject) {
+      // build the css
+      gulp.src('./css/react-bootstrap-table.css')
+        .pipe(concatCss("./react-bootstrap-table.min.css"))
+        .pipe(cssmin())
+        .on('error', reject)
+        .pipe(gulp.dest('./dist'))
+        .on('end', resolve);
+    }),
+    new Promise(function(resolve, reject) {
+      gulp.src(['./css/react-bootstrap-table.css',
+        './node_modules/react-s-alert/dist/s-alert-default.css',
+        './node_modules/react-s-alert/dist/s-alert-css-effects/scale.css'])
+        .pipe(concatCss('./react-bootstrap-table-all.min.css'))
+        .pipe(cssmin())
+        .on('error', reject)
+        .pipe(gulp.dest('./dist'))
+        .on('end', resolve);
+    })
+  ]).then(() => done())
 }
 exports.prod = gulp.series(exports.umdBuild, prod);
 
