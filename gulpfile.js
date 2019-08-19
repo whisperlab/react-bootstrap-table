@@ -100,9 +100,36 @@ exports.prod = gulp.series(exports.umdBuild, prod);
 //------------
 // EXAMPLES
 // -----------
-gulp.task('example-server', function() {
-
-  new WebpackDevServer(webpack(exampleConfig), {
+//gulp.task('example-server', function() {
+//
+//  new WebpackDevServer(webpack(exampleConfig), {
+//    publicPath: exampleConfig.serverConfig.publicPath,
+//    contentBase: exampleConfig.serverConfig.contentBase,
+//    hot: true,
+//    headers: {
+//      'Access-Control-Allow-Origin': '*'
+//    },
+//    stats: {
+//      assets: true,
+//      colors: true,
+//      version: false,
+//      hash: false,
+//      timings: true,
+//      chunks: true,
+//      chunkModules: false
+//    },
+//    historyApiFallback: true
+//  }).listen(exampleConfig.serverConfig.port, 'localhost', function(err, result) {
+//    if (err) {
+//      console.log(err);
+//    }
+//
+//    console.log('Listening at localhost:3004');
+//  });
+//
+//});
+function exampleServer() {
+  return new WebpackDevServer(webpack(exampleConfig), {
     publicPath: exampleConfig.serverConfig.publicPath,
     contentBase: exampleConfig.serverConfig.contentBase,
     hot: true,
@@ -126,8 +153,8 @@ gulp.task('example-server', function() {
 
     console.log('Listening at localhost:3004');
   });
-
-});
+}
+exports['example-server'] = exampleServer
 
 //gulp.task('default', ['prod']);
 exports.default = gulp.series(exports.prod);
