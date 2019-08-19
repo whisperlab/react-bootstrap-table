@@ -173,12 +173,12 @@ class ToolBar extends Component {
   handleDebounce = (func, wait, immediate) => {
     let timeout;
 
-    return () => {
+    return (...args) => {
       const later = () => {
         timeout = null;
 
         if (!immediate) {
-          func.apply(this, arguments);
+          func.apply(this, args);
         }
       };
 
@@ -189,7 +189,7 @@ class ToolBar extends Component {
       timeout = setTimeout(later, wait || 0);
 
       if (callNow) {
-        func.appy(this, arguments);
+        func.appy(this, args);
       }
     };
   }

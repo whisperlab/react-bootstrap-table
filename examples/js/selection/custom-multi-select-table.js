@@ -22,7 +22,7 @@ addProducts(5);
 
 class Checkbox extends React.Component {
   componentDidMount() { this.update(this.props.checked); }
-  componentWillReceiveProps(props) { this.update(props.checked); }
+  UNSAFE_componentWillReceiveProps(props) { this.update(props.checked); }
   update(checked) {
     ReactDOM.findDOMNode(this).indeterminate = checked === 'indeterminate';
   }

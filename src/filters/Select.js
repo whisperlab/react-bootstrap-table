@@ -23,7 +23,7 @@ class SelectFilter extends Component {
     };
   }
 
-  componentWillReceiveProps() {
+  UNSAFE_componentWillReceiveProps() {
     const currentSelectValue = this.selectInput.value;
     const isPlaceholderSelected = !currentSelectValue || currentSelectValue === '';
     this.setState(() => {

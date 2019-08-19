@@ -15,7 +15,7 @@ class PaginationList extends Component {
     };
   }
 
-  componentWillReceiveProps() {
+  UNSAFE_componentWillReceiveProps() {
     const { keepSizePerPageState } = this.props;
     if (!keepSizePerPageState) {
       this.closeDropDown();
