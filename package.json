@@ -1,11 +1,11 @@
 {
-  "name": "react-bootstrap-table",
+  "name": "@whisperlab/react-bootstrap-table",
   "version": "4.3.1",
   "description": "It's a react table for bootstrap",
   "main": "./lib/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AllenFang/react-bootstrap-table.git"
+    "url": "https://github.com/whisperlab/react-bootstrap-table.git"
   },
   "scripts": {
     "lint": "eslint src",
@@ -28,7 +28,7 @@
   "tags": [
     "react"
   ],
-  "author": "AllenFang",
+  "author": "whisperlab",
   "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.0.0",
@@ -46,7 +46,7 @@
     "eslint-config-airbnb": "0.1.0",
     "eslint-loader": "^1.3.0",
     "eslint-plugin-react": "3.6.3",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.2",
     "gulp-babel": "^6.0.0",
     "gulp-concat-css": "^2.2.0",
     "gulp-cssmin": "^0.1.7",

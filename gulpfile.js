@@ -19,19 +19,60 @@ var watching = false;
 var demo = false;
 
 
-gulp.task('default', ['prod']);
-
-gulp.task('clean', function() {
+//gulp.task('clean', function() {
+//  return del([
+//    './dist/*',
+//    './lib/**'
+//  ]);
+//});
+function clean() {
   return del([
     './dist/*',
     './lib/**'
   ]);
-});
+}
+exports.clean = clean;
+
+// build umd bundles for https://npmcdn.com/ and for browser <script> tag
+//gulp.task('umdBuild', ['clean'], shell.task([
+//  'webpack --config webpack.umd.config.js',
+//  'webpack --config webpack.umd.min.config.js'
+//]));
+function umdBuild(done) {
+  shell.task([
+    'webpack --config webpack.umd.config.js',
+    'webpack --config webpack.umd.min.config.js'
+  ])
+  done()
+}
+exports.umdBuild = gulp.series(exports.clean, umdBuild);
 
 //------------
 // PROD
 // -----------
-gulp.task('prod', ['umdBuild'], function() {
+//gulp.task('prod', ['umdBuild'], function() {
+//  // - Use gulp-babel to transpile each file for ppl who use webpack/browserify
+//  // - This will be the package.json entry point
+//  // - Most of the ppl will use this, and should use their own source maps when bundling,
+//  // as well as uglify in production.
+//  // - This is the way React itself distributes their package,
+//  // as well as other libraries like react-boostrap
+//  gulp.src(['./src/**/*.js', './src/*js'])
+//    .pipe(babel())
+//    .pipe(gulp.dest('./lib'));
+//  // build the css
+//  gulp.src('./css/react-bootstrap-table.css')
+//    .pipe(concatCss("./react-bootstrap-table.min.css"))
+//    .pipe(cssmin())
+//    .pipe(gulp.dest('./dist'));
+//  gulp.src(['./css/react-bootstrap-table.css',
+//    './node_modules/react-s-alert/dist/s-alert-default.css',
+//    './node_modules/react-s-alert/dist/s-alert-css-effects/scale.css'])
+//    .pipe(concatCss('./react-bootstrap-table-all.min.css'))
+//    .pipe(cssmin())
+//    .pipe(gulp.dest('./dist'));
+//});
+function prod(done) {
   // - Use gulp-babel to transpile each file for ppl who use webpack/browserify
   // - This will be the package.json entry point
   // - Most of the ppl will use this, and should use their own source maps when bundling,
@@ -52,13 +93,9 @@ gulp.task('prod', ['umdBuild'], function() {
     .pipe(concatCss('./react-bootstrap-table-all.min.css'))
     .pipe(cssmin())
     .pipe(gulp.dest('./dist'));
-});
-
-// build umd bundles for https://npmcdn.com/ and for browser <script> tag
-gulp.task('umdBuild', ['clean'], shell.task([
-  'webpack --config webpack.umd.config.js',
-  'webpack --config webpack.umd.min.config.js'
-]));
+  done()
+}
+exports.prod = gulp.series(exports.umdBuild, prod);
 
 //------------
 // EXAMPLES
@@ -91,6 +128,10 @@ gulp.task('example-server', function() {
   });
 
 });
+
+//gulp.task('default', ['prod']);
+exports.default = gulp.series(exports.prod);
+
 
 // TODO: consider dropping browserify and just use webpack
 //------------
